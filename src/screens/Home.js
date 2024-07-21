@@ -13,7 +13,11 @@ export const Home = () => {
 			<div>
 				<Curousel/>
 			</div>
-			<div>
+			<div className="m-3">
+				<Card/>
+				<Card/>
+				<Card/>
+				<Card/>
 				<Card/>
 			</div>
 			<div>
