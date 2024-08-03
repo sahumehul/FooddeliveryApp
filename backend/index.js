@@ -1,15 +1,32 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const MongoDB = require("./db")
-MongoDB();
-const userRouter = require("./routes/user")
-app.use(express.json());
-app.use("/api/v1",userRouter)
-app.get("/",(req,res)=>{
-    res.send("Hello world")
-})
+const cors = require("cors");
+const MongoDB = require("./db");
 
-app.listen(process.env.PORT,()=>{
-    console.log(`App is running on ${process.env.PORT}`)
-})
+// Apply CORS middleware before defining routes
+app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(express.json());
+
+MongoDB();
+
+const userRouter = require("./routes/user");
+app.use("/api/v1", userRouter);
+
+// CORS Headers for all routes
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
+
+app.get("/", (req, res) => {
+    res.send("Hello world");
+});
+
+app.listen(process.env.PORT, () => {
+    console.log(`App is running on ${process.env.PORT}`);
+});

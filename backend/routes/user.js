@@ -28,4 +28,36 @@ userRouter.post("/createuser", body("email","Incorrect Email").isEmail(),body("p
     })
 })
 
+userRouter.post("/login", (req, res) => {
+    const loginCred = req.body;
+  
+    User.findOne({ email: loginCred.email }).then((response) => {
+      if (!response) {
+        return res.status(400).json({
+          success: false,
+          message: "Email not Exist!!!"
+        });
+      }
+      
+      if (loginCred.password !== response.password) {
+        return res.status(400).json({
+          success: false,
+          message: "Email or password does not match..!!"
+        });
+      }
+  
+      // If email and password match, send success response
+      res.status(200).json({
+        success: true,
+        data: response
+      });
+    }).catch((err) => {
+      res.status(500).json({
+        success: false,
+        data: err
+      });
+    });
+  });
+  
+
 module.exports = userRouter;
