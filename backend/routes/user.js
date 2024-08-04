@@ -2,6 +2,9 @@ const express = require("express");
 const userRouter = express.Router();
 const User = require("../model/User");
 const {body, validationResult} = require("express-validator");
+require("dotenv").config();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
 
 userRouter.post("/createuser", body("email","Incorrect Email").isEmail(),body("password","Length should be 5").isLength({min: 5}), async(req,res)=>{
     const {name, email, password, location} = req.body;
@@ -9,8 +12,11 @@ userRouter.post("/createuser", body("email","Incorrect Email").isEmail(),body("p
     if(!errors.isEmpty()){
         return res.status(400).json({errors : errors.array()})
     }
+
+    const salt = await bcrypt.genSalt(10);
+    let hashPass = await bcrypt.hash(req.body.password,salt);
     const userData = new User({
-        name, email,password,location
+        name, email,password:hashPass,location
     })
 
     await userData.save().then((result)=>{
@@ -22,41 +28,48 @@ userRouter.post("/createuser", body("email","Incorrect Email").isEmail(),body("p
     }).catch((err)=>{
         res.status(400).json({
             success: false,
-            message: "Something went wrong",
-            data : err
+            message: "Email already Exist..!!",
+            error : err
         })
     })
 })
 
-userRouter.post("/login", (req, res) => {
+userRouter.post("/login", async(req, res) => {
     const loginCred = req.body;
-  
-    User.findOne({ email: loginCred.email }).then((response) => {
-      if (!response) {
-        return res.status(400).json({
-          success: false,
-          message: "Email not Exist!!!"
-        });
+
+    await User.findOne({email:loginCred.email}).then((user)=>{
+      if(user){
+        bcrypt.compare(loginCred.password,user.password).then((response)=>{
+          if(response){
+            const jwtToken = jwt.sign({
+              id: user._id
+            },process.env.SECRETKEY)
+
+            res.status(200).json({
+              success : true,
+              authToken : jwtToken
+            })
+          }else{
+            res.status(400).json({
+              success: false,
+              message: "Email or Password does not match..!!"
+            })
+          }
+        }).catch((err)=>{
+          res.status(400).json({
+            success : false,
+            message : "Internal server error",
+            err: err
+          })
+        })
+      }else{
+        res.status(500).json({
+          success : false,
+          message : "Email is not registered with us..."
+        })
       }
-      
-      if (loginCred.password !== response.password) {
-        return res.status(400).json({
-          success: false,
-          message: "Email or password does not match..!!"
-        });
-      }
-  
-      // If email and password match, send success response
-      res.status(200).json({
-        success: true,
-        data: response
-      });
-    }).catch((err) => {
-      res.status(500).json({
-        success: false,
-        data: err
-      });
-    });
+    })
+
   });
   
 

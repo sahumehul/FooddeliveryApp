@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const [credentials, setCredentials] = useState({ name: "", email: "", password: "", geolocation: "" });
-
+    const navigate= useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -23,8 +23,8 @@ const Signup = () => {
             const json = response.data;
             console.log(json);
 
-            if (!json.success) {
-                alert("Enter valid credentials");
+            if (json.success) {
+                navigate("/login")
             }
         } catch (error) {
             console.error("Error:", error);

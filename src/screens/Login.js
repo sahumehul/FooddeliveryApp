@@ -26,12 +26,15 @@ const Login = () => {
         }
       );
 
-      navigate("/")
+      
       const json = response.data;
       console.log(json);
 
-      if (!json.success) {
-        alert("Enter valid credentials");
+      if (json.success) {
+        localStorage.setItem("authToken",json.authToken);
+        console.log(localStorage.getItem("authToken"));
+        
+        navigate("/")
       }
     } catch (error) {
       console.error("Error:", error);
