@@ -3,7 +3,7 @@ const app = express();
 require("dotenv").config();
 const cors = require("cors");
 const MongoDB = require("./db");
-const foodRouter = require("./db")
+
 
 // Apply CORS middleware before defining routes
 app.use(cors({ origin: 'http://localhost:3000' }));
@@ -12,6 +12,7 @@ app.use(express.json());
 MongoDB();
 
 const userRouter = require("./routes/user");
+const foodRouter = require("./routes/FoodData")
 app.use("/api/v1", userRouter);
 app.use("/api/v1", foodRouter);
 
