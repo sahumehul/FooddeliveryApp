@@ -94,7 +94,7 @@ export const Home = () => {
 					foodData !==[] ? foodData.filter((item)=>(item.CategoryName === data.CategoryName) && (item.name.toLowerCase().includes(search.toLowerCase()))).map((fData)=>{
 						return (
 							<div key={fData._id} className="col-12 col-ms-6 col-lg-3">
-								<Card foodName={fData.name} options={fData.options} imgSrc={fData.img} desc={fData.description}/>
+								<Card foodItem={fData} options={fData.options}  desc={fData.description}/>
 							</div>
 						)
 					}) : <div>
