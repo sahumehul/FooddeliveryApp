@@ -10,14 +10,37 @@ const Card = (props) => {
 	const data= useCart();
 	const priceRef = useRef();
 	const finalPrice = quantity * parseInt(options[0][size])
+	// let foodItem = props.item;
 	const handleAddtoCart = async()=>{
+		let food = [];
+		for(const item of data){
+			if(item.id === props.foodItem._id ){
+				console.log("item",item);
+				
+				food = item
+
+				break;
+			}
+		}
+		console.log(food);
+		
+		if(food !== []){
+			if(food.size === size){
+				await dispatch({type: "UPDATE", id:props.foodItem._id, quantity : quantity, price: finalPrice});
+				return
+			}
+			else if(food.size !== size){
+				await dispatch({type : "ADD" , id: props.foodItem._id, name:props.foodItem.name,img:props.foodItem.img,price: finalPrice, quantity : quantity, size: size})
+				return
+			}
+			return 
+		}
 		await dispatch({type : "ADD" , id: props.foodItem._id, name:props.foodItem.name,price: finalPrice, quantity : quantity, size: size})
-		console.log(data);
 		
 	}
 	useEffect(()=>{
 		setSize(priceRef.current.value);
-		console.log(options[0][size]);
+		// console.log(options[0][size]);
 		
 	},[])
   return (
@@ -25,7 +48,7 @@ const Card = (props) => {
         <div className="card mt-3" style={{ width: "18rem", maxHeight: "360px" }}>
 					<img src={props.foodItem.img} className="card-img-top" alt="..." style={{height : "120px", objectFit:"fill"}} />
 					<div className="card-body">
-						<h5 className="card-title">{props.foodItem.foodName}</h5>
+						<h5 className="card-title">{props.foodItem.name}</h5>
 						<div className="container w-100">
 							<select className="m-2 h-100 bg-success rounded" onChange={(e)=>setQuantity(e.target.value)}>
 								{Array.from(Array(6), (e, i) => {
