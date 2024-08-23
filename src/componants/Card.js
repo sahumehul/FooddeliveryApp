@@ -15,14 +15,12 @@ const Card = (props) => {
 		let food = [];
 		for(const item of data){
 			if(item.id === props.foodItem._id ){
-				console.log("item",item);
 				
 				food = item
 
 				break;
 			}
 		}
-		console.log(food);
 		
 		if(food !== []){
 			if(food.size === size){

@@ -32,6 +32,7 @@ const Login = () => {
 
       if (json.success) {
         localStorage.setItem("authToken",json.authToken);
+        localStorage.setItem("email",credentials.email);
         console.log(localStorage.getItem("authToken"));
         
         navigate("/")

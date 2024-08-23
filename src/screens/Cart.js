@@ -1,5 +1,6 @@
 import React from 'react'
 import { useCart, useDispatch } from '../componants/Contextreducer'
+import axios from 'axios';
 
 const Cart = () => {
     const data = useCart();
@@ -10,10 +11,29 @@ const Cart = () => {
             <div className='m-5 w-100 text-center fs-3'>This cart is empty..</div>
         </div>)
     }
-    let totalPrice = data.reduce((total, food) => total + food.price, 0)
+    let totalPrice = data.reduce((total, food) => total + food.price, 0);
+
+    const handleCheckOut = async()=>{
+      const email = localStorage.getItem("email");
+      const response = await axios.post("http://localhost:5000/api/v1/orderData",{
+        order_data : data,
+        email: email,
+        order_date : new Date().toDateString()
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      console.log(response);
+      
+      if(response.status === 200){
+        dispatch({type : "DROP"})
+      }
+    }
   return (
     <div>
-    {console.log(data)}
         <div className='container m-auto mt-5 table-responsive  table-responsive-sm table-responsive-md' >
         <table className='table table-hover '>
           <thead className=' text-success fs-4'>
@@ -40,7 +60,7 @@ const Cart = () => {
         </table>
         <div><h1 className='fs-2'>Total Price: {totalPrice}/-  </h1></div>
         <div>
-          <button className='btn bg-success mt-5 '  > Check Out </button>
+          <button className='btn bg-success mt-5 ' onClick={handleCheckOut}  > Check Out </button>
         </div>
       </div>
     </div>
