@@ -15,15 +15,17 @@ const reducer =(state,action)=>{
             let newArr = [...state]
             newArr.splice(action.index,1)
             return newArr
-        case "UPDATE" : 
-            let arr = [...state];
-            arr.find((food , index)=>{
-                if(food.id === action.id){
-                    arr[index] = {...food, quantity : parseInt(action.quantity) + food.quantity , price : action.price + food.price}
+            case "UPDATE": 
+            return state.map(food => {
+                if (food.id === action.id) {
+                    return {
+                        ...food, 
+                        quantity: parseInt(action.quantity), 
+                        price: action.price
+                    };
                 }
-                return arr
-            })
-            return arr
+                return food;
+            });
             case "DROP" :
                 let empArray = [];
                 return empArray

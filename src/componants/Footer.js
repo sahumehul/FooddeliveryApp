@@ -1,23 +1,18 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import './Footer.css';
 
 const Footer = () => {
   return (
-    <div>
-      <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-    <div className="col-md-4 d-flex align-items-center">
-      <Link to="/" className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
-        
-      </Link>
-      <span className="text-muted">© 2021 Company, Inc</span>
-    </div>
+    <footer className="footer">
+      <div className="footer-content">
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+        <div className="social-links">
+          <a href="https://www.linkedin.com/in/mehul-sahu-4352181b2/" target="_blank" rel="noopener noreferrer">Linkedin</a>
+          <a href="https://www.instagram.com/mehul.mg.16/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
-    <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
-
-    </ul>
-  </footer> 
-    </div>
-  )
-}
-
-export default Footer 
+export default Footer;

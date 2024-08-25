@@ -17,7 +17,7 @@ const Navbar = () => {
   const items = useCart();
   return (
     <div>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-success">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-success fixed-top z-index-0">
   <div className="container-fluid">
     <Link className="navbar-brand fs-3 mb-2" to="/">New Samrat</Link>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,7 @@ const Navbar = () => {
         {
           (auth) ? 
           <li>
-        <Link className="nav-link active fs-5" aria-current="page" to="/">My Orders</Link>
+        <Link className="nav-link active fs-5" aria-current="page" to="/myorder">My Orders</Link>
         </li>
         : ""
         }

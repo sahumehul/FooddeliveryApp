@@ -1,0 +1,51 @@
+/* Home.css */
+
+.full-width-container {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+  }
+  
+  .food-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 0;
+    margin-left: 0;
+  }
+  
+  .food-card-wrapper {
+    flex: 0 0 calc(25% - 10px);
+    margin-bottom: 20px;
+    padding-right: 0;
+    padding-left: 0;
+  }
+  
+  @media (max-width: 992px) {
+    .food-card-wrapper {
+      flex: 0 0 calc(50% - 10px);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .food-card-wrapper {
+      flex: 0 0 100%;
+    }
+  }
+  
+  .carousel-item img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .search-input {
+    width: 75%;
+    margin: 0 auto;
+  }
+  
+  .alert-custom {
+    position: fixed;
+    top: 11%;
+    right: 0%;
+    z-index: 1060;
+  }
