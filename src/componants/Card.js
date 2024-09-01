@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useCart, useDispatch } from './Contextreducer';
+import { useNavigate } from 'react-router-dom';
 
 const Card = (props) => {
     let options = props.options;
@@ -7,38 +8,45 @@ const Card = (props) => {
     const [quantity, setQuantity] = useState(1);
     const [size, setSize] = useState("");
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const data = useCart();
     const priceRef = useRef();
     const finalPrice = quantity * parseInt(options[0][size]);
 
     const handleAddtoCart = async () => {
-        let food = [];
-        for (const item of data) {
-            if (item.id === props.foodItem._id) {
-                food = item;
-                break;
+        let email = localStorage.getItem("email");
+
+        if(!email){
+            navigate("/login")
+        }else{
+            let food = [];
+            for (const item of data) {
+                if (item.id === props.foodItem._id) {
+                    food = item;
+                    break;
+                }
             }
-        }
-
-        if (food.length !== 0) {
-            if (food.size === size) {
-                await dispatch({ type: "UPDATE", id: props.foodItem._id, quantity: quantity, price: finalPrice });
-                props.setAlertMessage(`${props.foodItem.name} updated in the cart`);
-
+    
+            if (food.length !== 0) {
+                if (food.size === size) {
+                    await dispatch({ type: "UPDATE", id: props.foodItem._id, quantity: quantity,img: props.foodItem.img, price: finalPrice });
+                    props.setAlertMessage(`${props.foodItem.name} updated in the cart`);
+    
+                } else {
+                    await dispatch({ type: "ADD", id: props.foodItem._id, name: props.foodItem.name, img: props.foodItem.img, price: finalPrice, quantity: quantity, size: size });
+                    props.setAlertMessage(`${props.foodItem.name} added to the cart`);
+    
+                }
             } else {
-                await dispatch({ type: "ADD", id: props.foodItem._id, name: props.foodItem.name, img: props.foodItem.img, price: finalPrice, quantity: quantity, size: size });
+                await dispatch({ type: "ADD", id: props.foodItem._id, name: props.foodItem.name,img: props.foodItem.img, price: finalPrice, quantity: quantity, size: size });
                 props.setAlertMessage(`${props.foodItem.name} added to the cart`);
-
             }
-        } else {
-            await dispatch({ type: "ADD", id: props.foodItem._id, name: props.foodItem.name, price: finalPrice, quantity: quantity, size: size });
-            props.setAlertMessage(`${props.foodItem.name} added to the cart`);
+    
+            // Clear the alert message after a few seconds
+            setTimeout(() => {
+                props.setAlertMessage(null);
+            }, 3000);
         }
-
-        // Clear the alert message after a few seconds
-        setTimeout(() => {
-            props.setAlertMessage(null);
-        }, 3000);
     }
 
     useEffect(() => {

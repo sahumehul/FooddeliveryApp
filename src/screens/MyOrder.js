@@ -9,7 +9,6 @@ export default function MyOrder() {
     const [orderData, setorderData] = useState({})
 
     const fetchMyOrder = async () => {
-        console.log(localStorage.getItem('email'))
         await fetch("http://localhost:5000/api/v1/myorder", {
             // credentials: 'include',
             // Origin:"http://localhost:3000/login",
@@ -42,7 +41,7 @@ export default function MyOrder() {
             </div>
 
             <div className='container mt-5'>
-                <div className='row'>
+                <div className='row '>
 
                     {orderData !== {} ? Array(orderData).map(data => {
                         return (
@@ -58,7 +57,7 @@ export default function MyOrder() {
                                                         <hr />
                                                     </div> :
 
-                                                        <div className="food-card-wrapper" >
+                                                        <div className="food-card-wrapper d-flex" >
                                                             <div className="card mt-3" style={{ width: "16rem", maxHeight: "360px" }}>
                                                                 <img src={arrayData.img} className="card-img-top" alt="..." style={{ height: "120px", objectFit: "fill" }} />
                                                                 <div className="card-body">
